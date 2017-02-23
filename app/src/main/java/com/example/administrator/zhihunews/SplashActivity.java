@@ -54,7 +54,7 @@ public class SplashActivity extends AppCompatActivity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                parseJson(response);
+                                //parseJson(response);
                                 iv_start.startAnimation(animation);      //开始动画
                             }
                         });
@@ -79,8 +79,7 @@ public class SplashActivity extends AppCompatActivity {
     private void parseJson(String response){
         Gson gson = new Gson();
         StartImg startImg = gson.fromJson(response,StartImg.class);
-        String imgUrl = startImg.getCreatives().get(0).getUrl().toString();
-        imgUrl = imgUrl.replace("\\","");
+        String imgUrl = startImg.getCreativesX().get(0).getUrl();
         Glide.with(SplashActivity.this).load(imgUrl).into(iv_start);
     }
 

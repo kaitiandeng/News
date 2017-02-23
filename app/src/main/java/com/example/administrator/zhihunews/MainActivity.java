@@ -25,9 +25,8 @@ import android.widget.Toast;
 import com.example.administrator.zhihunews.Util.HttpCallbackListener;
 import com.example.administrator.zhihunews.Util.HttpUtil;
 import com.example.administrator.zhihunews.gson.Latest;
-import com.example.administrator.zhihunews.gson.Stories;
 import com.google.gson.Gson;
-import java.util.List;
+
 
 
 public class MainActivity extends AppCompatActivity {
@@ -36,11 +35,10 @@ public class MainActivity extends AppCompatActivity {
     private boolean isLight;
     private Toolbar toolbar;
     private DrawerLayout mDrawerLayout;
-    private List<Stories> storiesList ;
     private ContentAdapter contentAdapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
-    private static final String TAG = "MainActivity";
+
     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,19 +95,14 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         initData();
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 1);
-        recyclerView.setLayoutManager(layoutManager);
-        contentAdapter = new ContentAdapter(storiesList);
-        recyclerView.setAdapter(contentAdapter);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);                             //设置进度条颜色
-        /*swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {                                                                    //设置下拉刷新的监听器
                 refreshContents();
             }
-        });*/
+        });
     }
 
     @Override
@@ -153,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         if(response!= null){
                             parseJson(response);
-                            Toast.makeText(MainActivity.this,"FUCK",Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this,"刷新成功！",Toast.LENGTH_LONG).show();
                         }else{
                             Toast.makeText(MainActivity.this,"获取数据失败！",Toast.LENGTH_LONG).show();
                         }
@@ -169,9 +162,19 @@ public class MainActivity extends AppCompatActivity {
     }
     private void parseJson(String response){
         Gson gson = new Gson();
-        Latest latest = gson.fromJson(response,Latest.class);
+        final Latest latest = gson.fromJson(response,Latest.class);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+                GridLayoutManager layoutManager = new GridLayoutManager(MainActivity.this, 1);
+                recyclerView.setLayoutManager(layoutManager);
+                contentAdapter = new ContentAdapter(latest.getStories());
+                recyclerView.setAdapter(contentAdapter);
+            }
+        });
     }
-    /*private void refreshContents() {
+    private void refreshContents() {
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -190,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         }).start();
-    }*/
+    }
 
     public boolean isLight() {
         return isLight;

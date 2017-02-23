@@ -12,8 +12,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:label="知乎日报">
-        </activity>
+            android:label="知乎日报"></activity>
         <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,6 +24,7 @@
             android:name=".SettingsActivity"
             android:label="设置" />
         <activity android:name=".ContentDetail" />
+        <activity android:name=".WebActivity"></activity>
     </application>
 
 </manifest>

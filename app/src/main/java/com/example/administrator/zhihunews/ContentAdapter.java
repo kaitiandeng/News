@@ -1,6 +1,7 @@
 package com.example.administrator.zhihunews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,10 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.example.administrator.zhihunews.Util.Tools;
-import com.example.administrator.zhihunews.gson.Stories;
+import com.example.administrator.zhihunews.gson.Latest;
+
 
 import java.util.List;
 
@@ -22,7 +24,7 @@ import java.util.List;
 public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<Stories> mContentList;
+    private List<Latest.StoriesBean> mStorieslist;
 
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -40,8 +42,8 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
     }
 
 
-    public ContentAdapter(List<Stories> storiesList) {
-        mContentList = storiesList;
+    public ContentAdapter(List<Latest.StoriesBean> storiesList) {
+        mStorieslist = storiesList;
     }
 
     @Override
@@ -49,19 +51,30 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
         mContext = parent.getContext();
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_item, parent, false);          //加载content_item布局
         final ViewHolder holder = new ViewHolder(v);                                                                    //在创建ViewHolder实例
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = holder.getAdapterPosition();
+                Latest.StoriesBean storiesBean = mStorieslist.get(position);
+                Toast.makeText(mContext,mStorieslist.get(position).getTitle(),Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(mContext,WebActivity.class);
+                intent.putExtra("id",storiesBean.getId());
+                mContext.startActivity(intent);
+            }
+        });
         return holder;
     }
 
     @Override
     public void onBindViewHolder(ContentAdapter.ViewHolder holder, int position) {                              //对ViewHolder子项进行赋值
-        Stories stories = mContentList.get(position);                                                         //每个被滚动到屏幕内的子项都会被得到position参数
-        holder.contentTitle.setText(stories.getTitle());                                                     //将数据设置到ImageView和TextView里
-        Glide.with(mContext).load(Tools.utilString(stories.getImages().toString())).into(holder.contentImg);
+        Latest.StoriesBean stories = mStorieslist.get(position);                                                         //每个被滚动到屏幕内的子项都会被得到position参数
+        holder.contentTitle.setText(stories.getTitle());                                                     //将数据设置到ImageView和TextView里);
+        //Glide.with(mContext).load(stories.getImages()).placeholder(R.mipmap.ic_icon).into(holder.contentImg);
     }
 
 
     @Override
     public int getItemCount() {
-        return mContentList.size();
+        return mStorieslist.size();
     }
 }
