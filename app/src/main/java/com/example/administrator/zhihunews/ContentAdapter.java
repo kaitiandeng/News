@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -69,7 +70,7 @@ public class ContentAdapter extends RecyclerView.Adapter<ContentAdapter.ViewHold
     public void onBindViewHolder(ContentAdapter.ViewHolder holder, int position) {                              //对ViewHolder子项进行赋值
         Latest.StoriesBean stories = mStorieslist.get(position);                                                         //每个被滚动到屏幕内的子项都会被得到position参数
         holder.contentTitle.setText(stories.getTitle());                                                     //将数据设置到ImageView和TextView里);
-        //Glide.with(mContext).load(stories.getImages()).placeholder(R.mipmap.ic_icon).into(holder.contentImg);
+        Glide.with(mContext).load(mStorieslist.get(position).getImages().get(0)).into(holder.contentImg);
     }
 
 

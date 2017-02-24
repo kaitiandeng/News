@@ -3,6 +3,7 @@ package com.example.administrator.zhihunews;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.AlphaAnimation;
@@ -31,12 +32,13 @@ public class SplashActivity extends AppCompatActivity {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.splash);
         iv_start = (ImageView) findViewById(R.id.iv_start);
-        tv_fuck = (TextView)findViewById(R.id.tv_fuck);
+        //tv_fuck = (TextView)findViewById(R.id.tv_fuck);
         loadImage();
+        Log.d("LoadImg","start");
     }
 
     private void loadImage() {
-        AlphaAnimation animation = new AlphaAnimation(0.5f, 1.0f);    //设置淡入淡出的动画效果
+        /*AlphaAnimation animation = new AlphaAnimation(0.5f, 1.0f);    //设置淡入淡出的动画效果
         animation.setFillAfter(true);             //动画执行完后是否停留在执行完的状态
         animation.setDuration(3000);              //设置动画时间
         animation.setAnimationListener(new Animation.AnimationListener() {
@@ -48,6 +50,7 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void onAnimationEnd(final Animation animation) {
                 String address = "https://news-at.zhihu.com/api/7/prefetch-launch-images/1086*1668";
+                Log.d("FUCK address","yes");
                 HttpUtil.sendRequest(address, new HttpCallbackListener() {
                     @Override
                     public void onFinish(final String response) {
@@ -55,7 +58,7 @@ public class SplashActivity extends AppCompatActivity {
                             @Override
                             public void run() {
                                 //parseJson(response);
-                                iv_start.startAnimation(animation);      //开始动画
+                                //iv_start.startAnimation(animation);      //开始动画
                             }
                         });
                         startActivity();
@@ -64,6 +67,7 @@ public class SplashActivity extends AppCompatActivity {
                     @Override
                     public void onError(Exception e) {
                         e.printStackTrace();
+                        startActivity();
                     }
                 });
             }
@@ -72,15 +76,32 @@ public class SplashActivity extends AppCompatActivity {
             public void onAnimationRepeat(Animation animation) {
 
             }
+        });*/
+        String address = "https://news-at.zhihu.com/api/7/prefetch-launch-images/1086*1668";
+        HttpUtil.sendRequest(address, new HttpCallbackListener() {
+            @Override
+            public void onFinish(final String response) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        parseJson(response);
+                    }
+                });
+            }
+
+            @Override
+            public void onError(Exception e) {
+                e.printStackTrace();
+            }
         });
-        startActivity();
     }
 
     private void parseJson(String response){
         Gson gson = new Gson();
         StartImg startImg = gson.fromJson(response,StartImg.class);
         String imgUrl = startImg.getCreativesX().get(0).getUrl();
-        Glide.with(SplashActivity.this).load(imgUrl).into(iv_start);
+        Glide.with(SplashActivity.this).load(imgUrl).crossFade(10000).into(iv_start);
+        startActivity();
     }
 
     private void startActivity() {
