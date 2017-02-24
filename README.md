@@ -1,6 +1,10 @@
-# News  
+# News  
 ##UI展示
 ###  Demo1
 ![demo1](https://github.com/kaitiandeng/News/blob/master/app/src/main/res/mipmap-xxhdpi/demo1.jpg)
 ###  Demo2
 ![demo2](https://github.com/kaitiandeng/News/blob/master/app/src/main/res/mipmap-xxhdpi/demo2.jpg)
+##用到的东东
+1. 网络请求 HttpURLConnection
+2. 图片加载框架 Glide  3.Gson解析
+##功能还在开发中。。。
