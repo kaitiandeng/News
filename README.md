@@ -1,5 +1,6 @@
 # News  
-##UI展示
+##UI展示 
+###   下载链接 [https://github.com/kaitiandeng/News/blob/master/app-debug.apk]
 ###  Demo1
 ![demo1](https://github.com/kaitiandeng/News/blob/master/app/src/main/res/mipmap-xxhdpi/demo1.jpg)
 ###  Demo2
